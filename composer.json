@@ -1,0 +1,24 @@
+{
+    "name": "qgmac/cloud_object_storage",
+    "description": "云对象存储集成客户端",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "zhanxianchao",
+            "email": "qgmac@qq.com"
+        }
+    ],
+    "require": {
+        "qcloud/cos-sdk-v5": "^2.6",
+        "obs/esdk-obs-php": "^3.23",
+        "ext-fileinfo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Qgmac\\CloudObjectStorage\\": "src"
+        }
+    }
+}

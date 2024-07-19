@@ -1,0 +1,1 @@
+{"version":1,"defects":{"ManagerTest::testSetConfig":5,"ManagerTest::testStore":4,"ManagerTest::testDelete":4},"times":{"ManagerTest::testSetConfig":0.004,"ManagerTest::testStore":0.025,"ManagerTest::testDelete":0.004}}
