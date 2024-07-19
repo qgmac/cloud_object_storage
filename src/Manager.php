@@ -15,6 +15,10 @@ class Manager
     protected array $config = [];
     protected array $instance = [];
 
+    public function __construct($config)
+    {
+        $this->setConfig($config);
+    }
 
     public function store(string $name = null): CloudInterface
     {
