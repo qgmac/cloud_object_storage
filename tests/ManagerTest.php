@@ -33,15 +33,13 @@ class ManagerTest extends TestCase
 
     public function testSetConfig()
     {
-        $manager = new Qgmac\CloudObjectStorage\Manager;
-        $manager->setConfig($this->cfg);
+        $manager = new Qgmac\CloudObjectStorage\Manager($this->cfg);
         $this->assertEquals($this->cfg, $manager->getConfig());
     }
 
     public function testStore()
     {
-        $manager = new Qgmac\CloudObjectStorage\Manager;
-        $manager->setConfig($this->cfg);
+        $manager = new Qgmac\CloudObjectStorage\Manager($this->cfg);
         $store = $manager->store('cos');
         $key = "vip_avatar/2.txt"; //此处的 key 为对象键，对象键是对象在存储桶中的唯一标识
         $srcPath = "d:/2.txt";//本地文件绝对路径
@@ -51,8 +49,7 @@ class ManagerTest extends TestCase
 
     public function testDelete()
     {
-        $manager = new Qgmac\CloudObjectStorage\Manager;
-        $manager->setConfig($this->cfg);
+        $manager = new Qgmac\CloudObjectStorage\Manager($this->cfg);
         $store = $manager->store('obs');
 
         $key = "vip_avatar/2.txt"; //此处的 key 为对象键，对象键是对象在存储桶中的唯一标识
