@@ -11,7 +11,9 @@
     "require": {
         "qcloud/cos-sdk-v5": "^2.6",
         "obs/esdk-obs-php": "^3.23",
-        "ext-fileinfo": "*"
+        "ext-fileinfo": "*",
+        "aliyuncs/oss-sdk-php": "^2.7",
+        "alibabacloud/credentials": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
