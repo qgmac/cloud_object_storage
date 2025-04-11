@@ -105,7 +105,7 @@ class ManagerTest extends TestCase
                     'username' => 'admin',
                     'password' => '123456',
                     'timeout' => 1,
-                    'url' => 'http://www.baidu.com/',
+                    'url' => 'https://www.baidu.com/',
                 ],
             ],
         ];

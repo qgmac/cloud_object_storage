@@ -44,8 +44,9 @@ $config = [
                 'host' => '',
                 'port' => 21,
                 'username' => '',
-                'password' => '',//即需要扮演的角色ID，格式为acs:ram::$accountID:role/$roleName
-                'timeout' => 10,
+                'password' => '',
+                'url' => '',
+                'timeout' => 5,
             ],
         ],
     ];
@@ -57,9 +58,8 @@ $default_store_url = $manager->store()->uploadFile($_file, $head_url);
 
 $cos_url = $manager->store('cos')->uploadFile($_file, $head_url);
 $obs_url = $manager->store('obs')->uploadFile($_file, $head_url);
-
 $oss_url = $manager->store('oss')->uploadFile($_file, $head_url);
-
+$oss_url = $manager->store('ftp')->uploadFile($_file, $head_url);
 $manager->store('cos')->deleteFile($store_key) bool;
 $manager->store('cos')->getFileUrl($store_key) string;
 $manager->store('cos')->exist($store_key) bool;
