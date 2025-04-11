@@ -9,6 +9,7 @@ namespace Qgmac\CloudObjectStorage\cloud;
 
 
 use AlibabaCloudCredentialsWrapper;
+use Exception;
 use OSS\Core\OssException;
 use OSS\Credentials\StaticCredentialsProvider;
 use AlibabaCloud\Credentials\Credential;
@@ -58,12 +59,15 @@ class Oss implements CloudInterface
         $this->ossClient = new OssClient($config);
     }
 
+    /**
+     * @throws Exception
+     */
     public function uploadFile(string $filePath, string $key): string
     {
         try {
             $this->ossClient->uploadFile($this->bucket, $key, $filePath);
         } catch (OssException|RequestCore_Exception $e) {
-            return '';
+             throw new Exception(403, $e->getMessage());
         }
         return $this->getFileUrl($key);
     }

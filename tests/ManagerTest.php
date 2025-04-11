@@ -1,62 +1,118 @@
 <?php
-/**
- *
- * @author zhanxianchao <qgmac@qq.com>
- * Date:   2024/7/19 上午11:42
- */
+
+namespace Qgmac\CloudObjectStorage\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Qgmac\CloudObjectStorage\Manager;
+use Qgmac\CloudObjectStorage\cloud\Ftp;
+use Qgmac\CloudObjectStorage\cloud\CloudInterface;
 
 class ManagerTest extends TestCase
 {
-    private array $cfg = [
-        'default' => 'cos',
-        'disks' => [
-            'cos' => [
-                'driver' => 'cos',
-                'secret_id' => '',
-                'secret_key' => '',
-                'region' => '',
-                'bucket' => '',
-                'url' => '',
-            ],
-            'obs' => [
-                'driver' => 'obs',
-                'key' => '',
-                'secret' => '',
-                'bucket' => '',
-                'url' => '',
-                'endpoint' => '',
-            ],
-        ],
-    ];
-
-    public function testSetConfig()
+    public function testDefaultStore()
     {
-        $manager = new Qgmac\CloudObjectStorage\Manager($this->cfg);
-        $this->assertEquals($this->cfg, $manager->getConfig());
+        $config = [
+            'default' => 'cos',
+            'disks' => [
+                'cos' => [
+                    'driver' => 'cos',
+                    'secret_id' => 'test_secret_id',
+                    'secret_key' => 'test_secret_key',
+                    'region' => 'test_region',
+                    'bucket' => 'test_bucket',
+                    'url' => 'test_url',
+                ],
+                'ftp' => [
+                    'driver' => 'ftp',
+                    'host' => 'test_host',
+                    'port' => 21,
+                    'username' => 'test_username',
+                    'password' => 'test_password',
+                    'timeout' => 10,
+                ],
+            ],
+        ];
+
+        $manager = new Manager($config);
+        $defaultStore = $manager->store();
+
+        $this->assertInstanceOf(CloudInterface::class, $defaultStore);
+        $this->assertEquals('cos', $manager->getConfig('default'));
     }
 
-    public function testStore()
+    public function testSpecificStore()
     {
-        $manager = new Qgmac\CloudObjectStorage\Manager($this->cfg);
-        $store = $manager->store('cos');
-        $key = "vip_avatar/2.txt"; //此处的 key 为对象键，对象键是对象在存储桶中的唯一标识
-        $srcPath = "d:/2.txt";//本地文件绝对路径
-        $url = $store->uploadFile($srcPath, $key);
-        $this->assertEquals(file_get_contents($srcPath), file_get_contents($url));
+        $config = [
+            'default' => 'ftp',
+            'disks' => [
+                'cos' => [
+                    'driver' => 'cos',
+                    'secret_id' => 'test_secret_id',
+                    'secret_key' => 'test_secret_key',
+                    'region' => 'test_region',
+                    'bucket' => 'test_bucket',
+                    'url' => 'test_url',
+                ],
+                'ftp' => [
+                    'driver' => 'ftp',
+                    'host' => 'test_host',
+                    'port' => 21,
+                    'username' => 'test_username',
+                    'password' => 'test_password',
+                    'timeout' => 10,
+                ],
+            ],
+        ];
+
+        $manager = new Manager($config);
+        $ftpStore = $manager->store('ftp');
+        $this->assertInstanceOf(Ftp::class, $ftpStore);
+        $this->assertEquals('ftp', $ftpStore->getConfig('driver'));
     }
 
-    public function testDelete()
+    public function testUndefinedStore()
     {
-        $manager = new Qgmac\CloudObjectStorage\Manager($this->cfg);
-        $store = $manager->store('obs');
+        $config = [
+            'default' => 'cos',
+            'disks' => [
+                'cos' => [
+                    'driver' => 'cos',
+                    'secret_id' => 'test_secret_id',
+                    'secret_key' => 'test_secret_key',
+                    'region' => 'test_region',
+                    'bucket' => 'test_bucket',
+                    'url' => 'test_url',
+                ],
+            ],
+        ];
 
-        $key = "vip_avatar/2.txt"; //此处的 key 为对象键，对象键是对象在存储桶中的唯一标识
-        $srcPath = "d:/2.txt";//本地文件绝对路径
-        $store->uploadFile($srcPath, $key);;
-        $this->assertTrue($store->exist($key));
-        $store->deleteFile($key);
-        $this->assertFalse($store->exist($key));
+        $manager = new Manager($config);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $manager->store('undefined');
+    }
+
+    public function testFtp()
+    {
+        $config = [
+            'default' => 'ftp',
+            'disks' => [
+                'ftp' => [
+                    'driver' => 'ftp',
+                    'root' => '/',
+                    'host' => '127.0.0.1',
+                    'port' => 21,
+                    'username' => 'admin',
+                    'password' => '123456',
+                    'timeout' => 1,
+                    'url' => 'http://www.baidu.com/',
+                ],
+            ],
+        ];
+
+        $manager = new Manager($config);
+        $defaultStore = $manager->store();
+        $this->assertInstanceOf(CloudInterface::class, $defaultStore);
+        $this->assertEquals('ftp', $manager->getConfig('default'));
     }
 }

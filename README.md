@@ -39,6 +39,14 @@ $config = [
                 'url' => '',
                 'endpoint' => '',
             ],
+             'ftp' => [
+                'driver' => 'ftp',
+                'host' => '',
+                'port' => 21,
+                'username' => '',
+                'password' => '',//即需要扮演的角色ID，格式为acs:ram::$accountID:role/$roleName
+                'timeout' => 10,
+            ],
         ],
     ];
 
