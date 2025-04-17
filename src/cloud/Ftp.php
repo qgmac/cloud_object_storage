@@ -38,7 +38,7 @@ class Ftp implements CloudInterface
         try {
             $this->filesystem->write($key, file_get_contents($filePath));
         } catch (FilesystemException|UnableToWriteFile $e) {
-            throw new Exception(403, $e->getMessage());
+            throw new Exception($e->getMessage(), 403);
         }
         return $this->getFileUrl($key);
     }
