@@ -36,7 +36,7 @@ class Ftp implements CloudInterface
     public function uploadFile(string $filePath, string $key): string
     {
         try {
-            $this->filesystem->createDirectory(dirname($key));
+            //$this->filesystem->createDirectory(dirname($key));
             $this->filesystem->write($key, file_get_contents($filePath));
         } catch (FilesystemException|UnableToWriteFile $e) {
             throw new Exception($e->getMessage(), 403);
